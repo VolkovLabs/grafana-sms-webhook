@@ -9,7 +9,21 @@
 
 Run the command `npm run start` to start the server.
 
-## Using
+## Docker Compose
+
+```
+version: '3.5'
+
+services:
+  sms:
+    image: ghcr.io/volkovlabs/grafana-sms-webhook:latest
+    container_name: sms
+    env_file: .env
+    ports:
+      - 8080:3000
+```
+
+## REST API
 
 ```
 fetch('http://localhost:3000/sendsms?number=1234567890', {
