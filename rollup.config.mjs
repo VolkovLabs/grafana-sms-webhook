@@ -11,6 +11,6 @@ export default [
         sourcemap: true,
       },
     ],
-    external: ['dotenv', 'express', 'express-jwt'],
+    external: ['dotenv', 'express', 'express-jwt', 'twilio', 'body-parser'],
   },
 ];
