@@ -1,4 +1,4 @@
-FROM node:18 as builder
+FROM node as builder
 
 WORKDIR /app
 
@@ -25,4 +25,4 @@ ENV NODE_ENV=production
 RUN npm install
 
 ## Start Server
-CMD [ "npm", "run", "prod" ]
+CMD [ "npm", "run", "server" ]

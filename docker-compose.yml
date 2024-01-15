@@ -1,11 +1,11 @@
 version: '3.5'
 
 services:
-  server:
+  sms:
     build:
       context: .
       dockerfile: ./Dockerfile
-    container_name: server
+    container_name: sms
     env_file: .env
     ports:
-      - 3000:3000
+      - 8080:3000
