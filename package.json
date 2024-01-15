@@ -1,19 +1,11 @@
 {
-  "name": "sms-webhook",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "build": "rollup -c",
-    "clean": "rimraf ./dist",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
-    "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "prettier": "prettier . --write",
-    "typecheck": "tsc --emitDeclarationOnly false --noEmit"
-  },
-  "keywords": [],
   "author": "",
-  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-jwt": "^8.4.1"
+  },
+  "description": "",
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.11.1",
@@ -28,9 +20,20 @@
     "rollup-plugin-esbuild": "^6.1.0",
     "typescript": "^5.3.3"
   },
-  "dependencies": {
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "express-jwt": "^8.4.1"
-  }
+  "keywords": [],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "sms-webhook",
+  "scripts": {
+    "build": "rollup -c",
+    "clean": "rimraf ./dist",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
+    "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "prettier": "prettier . --write",
+    "prod": "node dist/index.js",
+    "start": "docker compose build && docker compose up",
+    "stop": "docker-compose down",
+    "typecheck": "tsc --emitDeclarationOnly false --noEmit"
+  },
+  "version": "1.0.0"
 }
