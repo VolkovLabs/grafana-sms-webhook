@@ -1,7 +1,6 @@
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
-import { expressjwt } from 'express-jwt';
 import twilio from 'twilio';
 
 import { GrafanaNotificationPayload } from './types';
@@ -28,21 +27,25 @@ const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_A
 app.use(bodyParser.json());
 
 /**
+ * Add api key verification
+ */
+app.use((req, res, next) => {
+  if (!req.headers.authorization || process.env.API_KEY !== req.headers.authorization) {
+    const error = new Error('Invalid key');
+    error.name = 'UnauthorizedError';
+
+    throw error;
+  }
+
+  next();
+});
+
+/**
  * Send SMS
  */
 app.post(
   '/sendsms',
-  expressjwt({
-    secret: process.env.SECRET || '',
-    algorithms: ['HS256'],
-    getToken: (req: Request) => {
-      if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-        return req.headers.authorization.split(' ')[1];
-      }
-      return;
-    },
-  }),
-  async (req: Request<null, { message: string; details: unknown }, GrafanaNotificationPayload>, res) => {
+  async (req: Request<null, { message: string; details?: unknown }, GrafanaNotificationPayload>, res) => {
     const phoneNumber = req.query.number;
 
     /**
