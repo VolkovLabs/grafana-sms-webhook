@@ -45,18 +45,27 @@ app.post(
   async (req: Request<null, { message: string; details: unknown }, GrafanaNotificationPayload>, res) => {
     const phoneNumber = req.query.number;
 
+    /**
+     * No phone number
+     */
     if (!phoneNumber) {
       return res.status(400).send({
         message: 'No number parameter',
       });
     }
 
+    /**
+     * Invalid phone number
+     */
     if (typeof phoneNumber !== 'string') {
       return res.status(400).send({
         message: 'Invalid number parameter',
       });
     }
 
+    /**
+     * Send message
+     */
     try {
       await twilioClient.messages.create({
         body: req.body.message,
@@ -67,6 +76,9 @@ app.post(
         message: 'success',
       });
     } catch (e) {
+      /**
+       * Unable to send message
+       */
       res.status(502).send({
         message: 'Unable to send message',
         details: e,
@@ -79,12 +91,28 @@ app.post(
  * Error Handling
  */
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  /**
+   * Token verification error
+   */
   if (err.name === 'UnauthorizedError') {
     return res.status(401).send({
       message: 'Access Denied',
     });
   }
 
+  /**
+   * Unknown Error
+   */
+  if (err) {
+    console.error('Unknown error', err);
+    return res.status(500).send({
+      message: 'Server Error',
+    });
+  }
+
+  /**
+   * Call next handler
+   */
   next();
 });
 
