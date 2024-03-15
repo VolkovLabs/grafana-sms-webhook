@@ -7,3 +7,9 @@
 - Add GitHub workflows (#3)
 - Add server to Send sms via Twilio (#2)
 - Initial Commit
+
+## 1.1.0 (2024-03-15)
+
+### Features / Enhancements
+
+- Add support for multiple phone number comma separated (#4)

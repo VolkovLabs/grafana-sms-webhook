@@ -67,14 +67,29 @@ app.post(
     }
 
     /**
+     * Split to multiple numbers
+     */
+    const numbers = phoneNumber.split(',');
+
+    /**
+     * Prepare messages
+     */
+    const allPromise = Promise.all(
+      numbers.map(async (number) => {
+        await twilioClient.messages.create({
+          body: req.body.message || 'Test',
+          from: process.env.TWILIO_PHONE_NUMBER,
+          to: `+${number}`,
+        });
+      })
+    );
+
+    /**
      * Send message
      */
     try {
-      await twilioClient.messages.create({
-        body: req.body.message,
-        from: process.env.TWILIO_PHONE_NUMBER,
-        to: `+${phoneNumber}`,
-      });
+      await allPromise;
+
       res.send({
         message: 'success',
       });

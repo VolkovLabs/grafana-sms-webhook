@@ -36,5 +36,5 @@
     "stop": "docker-compose down",
     "typecheck": "tsc --emitDeclarationOnly false --noEmit"
   },
-  "version": "1.0.0"
+  "version": "1.1.0"
 }
