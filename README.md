@@ -34,7 +34,7 @@ Run the command `npm install` and `npm run start` to start the server.
 ## REST API
 
 ```
-fetch('http://localhost:3000/sendsms?number=1234567890', {
+fetch('http://localhost:3000/sendsms?number=1234567890,19087653321', {
     method: 'POST',
     headers: {
         authorization: '[apiKey]'
