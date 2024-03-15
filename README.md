@@ -42,7 +42,13 @@ fetch('http://localhost:3000/sendsms?number=1234567890,19087653321', {
     body: JSON.stringify({
         message: 'Your message'
     })
-})
+}).then((response) => response.text())
+  .then((body) => {
+    console.log(body);
+  })
+  .catch((error) => {
+    console.error('error in execution', error);
+  })
 ```
 
 ## Feedback
