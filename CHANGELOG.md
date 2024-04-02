@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.1.0 (2024-03-15)
+
+### Features / Enhancements
+
+- Add support for multiple phone number comma separated (#4)
+
 ## 1.0.0 (2024-01-15)
 
 ### Features / Enhancements
