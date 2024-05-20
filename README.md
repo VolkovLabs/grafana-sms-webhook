@@ -51,6 +51,9 @@ fetch('http://localhost:3000/sendsms?number=1234567890,12223334455', {
   })
 ```
 
+## Logging
+`LOG_LEVEL` config is set in `.env` file. All possible values are described in [Winston Logging Levels](https://github.com/winstonjs/winston?tab=readme-ov-file#logging-levels)
+
 ## Feedback
 
 We're looking forward to hearing from you. You can use different ways to get in touch with us.

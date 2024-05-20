@@ -2,6 +2,7 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import twilio from 'twilio';
+import winston from 'winston';
 
 import { GrafanaNotificationPayload } from './types';
 
@@ -15,6 +16,14 @@ dotenv.config();
  */
 const app = express();
 const port = process.env.PORT || 3000;
+
+/**
+ * Create logger
+ */
+const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL,
+  transports: [new winston.transports.Console()],
+});
 
 /**
  * Create twilio client
@@ -51,8 +60,8 @@ app.post(
     /**
      * Log payload
      */
-    console.log('Request query:', req.query);
-    console.log('Request body:', req.body);
+    logger.info('Request query:', req.query);
+    logger.info('Request body:', req.body);
 
     /**
      * No phone number
@@ -91,14 +100,14 @@ app.post(
         /**
          * Log twilio payload
          */
-        console.log('Request to Twilio:', params);
+        logger.info('Request to Twilio:', params);
 
         const result = await twilioClient.messages.create(params);
 
         /**
          * Log twilio response
          */
-        console.log('Twilio Response:', result);
+        logger.info('Twilio Response:', result);
       })
     );
 
@@ -115,7 +124,7 @@ app.post(
       /**
        * Log error message
        */
-      console.log('Twilio Error:', e);
+      logger.info('Twilio Error:', e);
 
       /**
        * Unable to send message
@@ -145,7 +154,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
    * Unknown Error
    */
   if (err) {
-    console.error('Unknown error', err);
+    logger.error('Unknown error', err);
     return res.status(500).send({
       message: 'Server Error',
     });
@@ -161,5 +170,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
  * Start Server
  */
 app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
+  logger.info(`App listening on port ${port}`);
 });
