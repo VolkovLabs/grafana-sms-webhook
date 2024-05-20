@@ -1,5 +1,5 @@
 {
-  "author": "",
+  "author": "Volkov Labs",
   "dependencies": {
     "body-parser": "^1.20.2",
     "dotenv": "^16.3.1",
@@ -7,7 +7,7 @@
     "twilio": "^4.20.1",
     "winston": "^3.13.0"
   },
-  "description": "",
+  "description": "Twilio SMS Webhook for Grafana",
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.11.1",
@@ -22,8 +22,7 @@
     "rollup-plugin-esbuild": "^6.1.0",
     "typescript": "^5.3.3"
   },
-  "keywords": [],
-  "license": "ISC",
+  "license": "Apache-2.0",
   "main": "index.js",
   "name": "sms-webhook",
   "scripts": {
@@ -37,5 +36,5 @@
     "stop": "docker-compose down",
     "typecheck": "tsc --emitDeclarationOnly false --noEmit"
   },
-  "version": "1.1.0"
+  "version": "1.2.0"
 }
