@@ -102,6 +102,9 @@ app.post(
          */
         logger.info('Request to Twilio:', params);
 
+        /**
+         * Create message
+         */
         const result = await twilioClient.messages.create(params);
 
         /**
@@ -124,7 +127,7 @@ app.post(
       /**
        * Log error message
        */
-      logger.info('Twilio Error:', e);
+      logger.error('Twilio Error:', e);
 
       /**
        * Unable to send message
