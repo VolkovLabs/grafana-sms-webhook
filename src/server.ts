@@ -2,6 +2,7 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import twilio from 'twilio';
+import winston from 'winston';
 
 import { GrafanaNotificationPayload } from './types';
 
@@ -15,6 +16,14 @@ dotenv.config();
  */
 const app = express();
 const port = process.env.PORT || 3000;
+
+/**
+ * Create logger
+ */
+const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL,
+  transports: [new winston.transports.Console()],
+});
 
 /**
  * Create twilio client
@@ -49,6 +58,12 @@ app.post(
     const phoneNumber = req.query.number;
 
     /**
+     * Log payload
+     */
+    logger.info('Request query:', req.query);
+    logger.info('Request body:', req.body);
+
+    /**
      * No phone number
      */
     if (!phoneNumber) {
@@ -76,11 +91,26 @@ app.post(
      */
     const allPromise = Promise.all(
       numbers.map(async (number) => {
-        await twilioClient.messages.create({
+        const params = {
           body: req.body.message || 'Test',
           from: process.env.TWILIO_PHONE_NUMBER,
           to: `+${number}`,
-        });
+        };
+
+        /**
+         * Log twilio payload
+         */
+        logger.info('Request to Twilio:', params);
+
+        /**
+         * Create message
+         */
+        const result = await twilioClient.messages.create(params);
+
+        /**
+         * Log twilio response
+         */
+        logger.info('Twilio Response:', result);
       })
     );
 
@@ -94,6 +124,11 @@ app.post(
         message: 'success',
       });
     } catch (e) {
+      /**
+       * Log error message
+       */
+      logger.error('Twilio Error:', e);
+
       /**
        * Unable to send message
        */
@@ -122,7 +157,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
    * Unknown Error
    */
   if (err) {
-    console.error('Unknown error', err);
+    logger.error('Unknown error', err);
     return res.status(500).send({
       message: 'Server Error',
     });
@@ -138,5 +173,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
  * Start Server
  */
 app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
+  logger.info(`App listening on port ${port}`);
 });
