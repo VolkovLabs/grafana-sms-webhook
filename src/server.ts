@@ -49,6 +49,12 @@ app.post(
     const phoneNumber = req.query.number;
 
     /**
+     * Log payload
+     */
+    console.log('Request query:', req.query);
+    console.log('Request body:', req.body);
+
+    /**
      * No phone number
      */
     if (!phoneNumber) {
@@ -76,11 +82,23 @@ app.post(
      */
     const allPromise = Promise.all(
       numbers.map(async (number) => {
-        await twilioClient.messages.create({
+        const params = {
           body: req.body.message || 'Test',
           from: process.env.TWILIO_PHONE_NUMBER,
           to: `+${number}`,
-        });
+        };
+
+        /**
+         * Log twilio payload
+         */
+        console.log('Request to Twilio:', params);
+
+        const result = await twilioClient.messages.create(params);
+
+        /**
+         * Log twilio response
+         */
+        console.log('Twilio Response:', result);
       })
     );
 
@@ -94,6 +112,11 @@ app.post(
         message: 'success',
       });
     } catch (e) {
+      /**
+       * Log error message
+       */
+      console.log('Twilio Error:', e);
+
       /**
        * Unable to send message
        */
